@@ -1,4 +1,5 @@
 import React, {useMemo, useReducer, useContext} from 'react';
+//import { AsyncStorage } from "@react-native-community/async-storage";
 import {AsyncStorage} from "react-native";
 import axios from "axios";
 
@@ -20,8 +21,10 @@ function AuthProvider(props) {
     const getAuthState = async () => {
         try {
             //GET TOKEN && USER
+            console.log("getAuthState called");
             let token = await AsyncStorage.getItem(TOKEN_KEY);
             let user = await AsyncStorage.getItem(USER_KEY);
+            console.log("getAuthState user: "+user);
             user = JSON.parse(user);
 
             if (token !== null && user!== null) await handleLogin({token, user});
@@ -37,7 +40,10 @@ function AuthProvider(props) {
     const handleLogin = async (data) => {
         try{
             //STORE DATA
+            console.log("handleLogin data: "+JSON.stringify(data));
             let {token, user} = data;
+            console.log("handleLogin token: "+token);
+            console.log("handleLogin user: "+JSON.stringify(user));
             let data_ = [[USER_KEY, JSON.stringify(user)], [TOKEN_KEY, token]];
             await AsyncStorage.multiSet(data_);
 
@@ -45,7 +51,8 @@ function AuthProvider(props) {
             axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
 
             //DISPATCH TO REDUCER
-            dispatch({type: LOGGED_IN, user:data.user});
+            console.log("handleLogin data.user: "+JSON.stringify(data.user));
+            dispatch({type: LOGGED_IN, user:data.user, username:'foobar'});
         }catch (error) {
             throw new Error(error);
         }

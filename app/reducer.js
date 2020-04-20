@@ -9,10 +9,13 @@ export const  initialState = {
 
 //REDUCER
 const authReducer = (state = initialState, action) => {
+    console.log("authReducer state: "+JSON.stringify(state));
+    console.log("authReducer action: "+JSON.stringify(action));
     switch (action.type) {
         case LOGGED_IN:{
-            let { user } = action;
-
+            let { user, username } = action;
+            console.log("authReducer user: "+JSON.stringify(user));
+            console.log("authReducer username: "+username)
             return {...state, isLoggedIn: true, user};
         }
 
